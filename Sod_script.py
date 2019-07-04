@@ -16,6 +16,9 @@ error_variables = ['L_1', 'L_2', 'L_inf']
 
 
 def main():
+    """
+    Main file
+    """
     cfl_logspace = np.logspace(-2, 2, n)  # (log_min,log_max,stuetzstellen)
     L_2_rho = []
     times = []
@@ -34,6 +37,8 @@ def main():
     plt.xlabel('CFL')
     plt.ylabel('L_2 rho')
     plt.grid(True)
+
+
     print(80*'#')
     cfl_logspace = np.logspace(-2, 2, n)
     L_2_rho = []
@@ -53,6 +58,9 @@ def main():
 
 
 def loop_exp(simulation, cfl, n):
+    """
+    Set cfl for simulation and start run function n times
+    """
     set_cfl(simulation, cfl)
     for _ in range(n):
         errors = []
@@ -69,6 +77,9 @@ def loop_exp(simulation, cfl, n):
 
 
 def loop_imp(simulation, cfl, n):
+    """
+    Set cfl for simulation and start run function n times
+    """
     set_cfl(simulation, cfl)
     for _ in range(n):
         errors = []
@@ -85,6 +96,9 @@ def loop_imp(simulation, cfl, n):
 
 
 def run_exp(simulation):
+    """
+    Run explicit simulation in subprocess and return computation time and resiudals
+    """
     set_implicit(False)
     # Run Simulation
     output = subprocess.check_output(
@@ -103,6 +117,9 @@ def run_exp(simulation):
 
 
 def run_imp(simulation):
+    """
+    Run implicit simulation in subprocess and return computation time and resiudals
+    """
     set_implicit(True)
     # Run Simulation
     output = subprocess.check_output(
@@ -121,6 +138,10 @@ def run_imp(simulation):
 
 
 def avg(errors, variable, category):
+    """
+    create specific average for error category(L1,L2...)
+    and varriable(rho,v_1,_v2...) from error dict
+    """
     sum = 0
     for each in errors:
         sum += each[category][variable]
@@ -128,6 +149,9 @@ def avg(errors, variable, category):
 
 
 def set_implicit(implicit):
+    """
+    change time intefration scheme in cfdfv input file
+    """
     with open('./%s' % simulation, 'r') as file:
         lines = file.readlines()
     with open('./%s' % simulation, 'w') as file:
@@ -142,6 +166,9 @@ def set_implicit(implicit):
 
 
 def set_cfl(simulation, cfl):
+    """
+    change CFL value in cfdfv input file
+    """
     with open('./%s' % simulation, 'r') as file:
         lines = file.readlines()
     with open('./%s' % simulation, 'w') as file:
